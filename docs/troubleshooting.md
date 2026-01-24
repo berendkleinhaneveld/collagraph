@@ -12,7 +12,7 @@ pip install collagraph
 
 Or if using `uv`:
 ```bash
-uv pip install collagraph
+uv add collagraph
 ```
 
 ### PySide6 not found
@@ -23,7 +23,7 @@ pip install collagraph[pyside]
 
 Or with `uv`:
 ```bash
-uv pip install "collagraph[pyside]"
+uv add "collagraph[pyside]"
 ```
 
 ### PyGfx not found
@@ -35,9 +35,11 @@ pip install collagraph[pygfx]
 ### Syntax highlighting not working for .cgx files
 Install the appropriate editor extension:
 
-**VSCode**: Search for "CGX" in the extensions marketplace and install [CGX syntax highlight for VSCode](https://github.com/fork-tongue/cgx-syntax-highlight-vscode)
+**VSCode**: Search for "Collagraph" in the extensions marketplace or install from [Collagraph LSP for VSCode](https://github.com/fork-tongue/collagraph-lsp-vscode)
 
-**Sublime Text**: Install via Package Control by searching for "CGX Syntax Highlight" or install from [CGX syntax highlight for Sublime Text](https://github.com/fork-tongue/cgx-syntax-highlight-sublime)
+**Sublime Text**: Install via Package Control by searching for "Collagraph LSP" or install from [Collagraph LSP for Sublime Text](https://github.com/fork-tongue/collagraph-lsp-sublime)
+
+**Zed**: Install from [Collagraph LSP for Zed](https://github.com/fork-tongue/collagraph-lsp-zed)
 
 ## Runtime Issues
 
@@ -63,24 +65,6 @@ def init(self):
 
 def increment(self):
     self.state["count"] += 1  # Triggers re-render
-```
-
-**Problem**: Replacing the entire state dictionary
-```python
-# Wrong: This breaks reactivity
-def reset(self):
-    self.state = {}  # Don't replace the state object
-```
-
-**Solution**: Modify state properties individually
-```python
-# Correct: Modify individual properties
-def reset(self):
-    self.state.clear()
-    self.state["count"] = 0
-    # Or update in place
-    for key in list(self.state.keys()):
-        del self.state[key]
 ```
 
 **Problem**: Mutating objects outside the reactive system
@@ -234,11 +218,6 @@ from .subdir.counter import Counter
 ### Slow rendering
 
 **Problem**: Too many components re-rendering
-```python
-# Every state change re-renders entire tree
-def init(self):
-    self.state["global_data"] = huge_list
-```
 
 **Solution**: Split into smaller components
 ```python
@@ -287,17 +266,17 @@ def init(self):
 
 **Problem**: Not cleaning up watchers or computed properties
 ```python
-def on_mounted(self):
+def mounted(self):
     # Creating watchers without cleanup
     watch(lambda: self.state["data"], self.handle_change)
 ```
 
 **Solution**: Clean up in unmount hook
 ```python
-def on_mounted(self):
+def mounted(self):
     self._watcher = watch(lambda: self.state["data"], self.handle_change)
 
-def on_unmounted(self):
+def before_unmount(self):
     # Clean up watcher
     if hasattr(self, "_watcher"):
         self._watcher()  # Call the cleanup function
@@ -342,27 +321,32 @@ logging.basicConfig(level=logging.DEBUG)
 
 ### Check component state
 ```python
-def on_mounted(self):
-    print(f"Component state: {dict(self.state)}")
+def mounted(self):
+    print(f"Component state: {self.state}")
     print(f"Component props: {self.props}")
 ```
 
 ### Verify template refs
 ```python
-def on_mounted(self):
+def mounted(self):
     print(f"Available refs: {list(self.refs.keys())}")
 ```
 
-### Use the render method directly
-Instead of using .cgx files, try using the render method to isolate issues:
-```python
-class MyComponent(cg.Component):
-    def render(self):
-        return {
-            "type": "label",
-            "text": f"Count: {self.state['count']}"
-        }
+### View compiled component code
+To see how your .cgx file is compiled to Python, set the `CGX_DEBUG` environment variable:
+
+```bash
+# Linux/macOS
+CGX_DEBUG=1 python -m collagraph my_app.cgx
+
+# Windows (PowerShell)
+$env:CGX_DEBUG=1; python -m collagraph my_app.cgx
+
+# Windows (cmd)
+set CGX_DEBUG=1 && python -m collagraph my_app.cgx
 ```
+
+This will print the generated Python code, which can help identify issues with template compilation.
 
 ## See Also
 
