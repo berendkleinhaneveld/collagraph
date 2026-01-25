@@ -284,21 +284,21 @@ Collagraph provides syntax highlighting extensions for popular editors:
 
 ### Visual Studio Code
 
-Install the [CGX syntax highlight for VSCode](https://github.com/fork-tongue/cgx-syntax-highlight-vscode) extension:
+Install the [Collagraph LSP for VSCode](https://github.com/fork-tongue/collagraph-lsp-vscode) extension:
 
 1. Open VSCode
-2. Search for "CGX" in the extensions marketplace
+2. Search for "Collagraph" in the extensions marketplace
 3. Install the extension
 4. `.cgx` files will now have proper syntax highlighting
 
 ### Sublime Text
 
-Install the [CGX syntax highlight for Sublime Text](https://github.com/fork-tongue/cgx-syntax-highlight-sublime) package:
+Install the [Collagraph LSP for Sublime Text](https://github.com/fork-tongue/collagraph-lsp-sublime) package:
 
 1. Open Sublime Text
 2. Open Package Control (`Cmd+Shift+P` on Mac, `Ctrl+Shift+P` on Windows/Linux)
 3. Select "Package Control: Install Package"
-4. Search for "CGX Syntax Highlight"
+4. Search for "Collagraph LSP"
 5. Install the package
 
 ### Features

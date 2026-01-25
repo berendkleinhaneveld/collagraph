@@ -463,7 +463,7 @@ class StatefulComponent(cg.Component):
 
     def before_unmount(self):
         # Save state before reload
-        self.__class__._preserved_state = dict(self.state)
+        self.__class__._preserved_state = self.state
 ```
 
 ## See Also

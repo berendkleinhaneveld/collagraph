@@ -17,7 +17,7 @@ pip install collagraph
 [uv](https://github.com/astral-sh/uv) is a fast Python package installer and resolver:
 
 ```bash
-uv pip install collagraph
+uv add collagraph
 ```
 
 Or use uv to run Collagraph apps directly without installing:
@@ -39,14 +39,14 @@ pip install collagraph[pyside]
 
 **With uv:**
 ```bash
-uv pip install collagraph[pyside]
+uv add collagraph[pyside]
 ```
 
 Or install PySide6 separately:
 ```bash
 pip install PySide6>=6.6.2
 # or
-uv pip install PySide6>=6.6.2
+uv add PySide6>=6.6.2
 ```
 
 ### Pygfx (3D Graphics)
@@ -58,14 +58,14 @@ pip install collagraph[pygfx]
 
 **With uv:**
 ```bash
-uv pip install collagraph[pygfx]
+uv add collagraph[pygfx]
 ```
 
 Or install pygfx separately:
 ```bash
 pip install pygfx>=0.13.0
 # or
-uv pip install pygfx>=0.13.0
+uv add pygfx>=0.13.0
 ```
 
 ### Multiple Backends
@@ -75,7 +75,7 @@ To install multiple backends:
 ```bash
 pip install collagraph[pyside,pygfx]
 # or
-uv pip install collagraph[pyside,pygfx]
+uv add collagraph[pyside,pygfx]
 ```
 
 ## Install from Source
@@ -164,7 +164,7 @@ code --install-extension berendkleinhaneveld.collagraph
 ```
 
 #### Sublime Text
-See the [collagraph-sublime](https://github.com/fork-tongue/cgx-syntax-highlight-sublime) repository for installation instructions.
+See the [Collagraph LSP for Sublime Text](https://github.com/fork-tongue/collagraph-lsp-sublime) repository for installation instructions.
 
 ### Linting and Formatting
 
@@ -173,7 +173,7 @@ Install `ruff-cgx` for linting and formatting `.cgx` files:
 ```bash
 pip install ruff-cgx
 # or
-uv pip install ruff-cgx
+uv add ruff-cgx
 ```
 
 This enables Ruff to work with `.cgx` files, providing linting and formatting for both the template and script sections.

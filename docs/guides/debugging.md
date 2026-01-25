@@ -248,8 +248,8 @@ class MyComponent(cg.Component):
         """Print current component state"""
         print("=== Component State ===")
         print(f"Class: {self.__class__.__name__}")
-        print(f"Props: {dict(self.props)}")
-        print(f"State: {dict(self.state)}")
+        print(f"Props: {self.props}")
+        print(f"State: {self.state}")
         print(f"Refs: {list(self.refs.keys())}")
         print(f"Parent: {self.parent.__class__.__name__ if self.parent else None}")
 
@@ -265,8 +265,7 @@ import json
 class MyComponent(cg.Component):
     def print_state(self):
         """Pretty print state as JSON"""
-        state_dict = dict(self.state)
-        print(json.dumps(state_dict, indent=2, default=str))
+        print(json.dumps(self.state, indent=2, default=str))
 ```
 
 ### State Change Tracking
@@ -328,7 +327,7 @@ class MyComponent(cg.Component):
 
         self.update_log.append({
             "timestamp": time.time(),
-            "state": dict(self.state),
+            "state": self.state,
             "stack": stack
         })
 

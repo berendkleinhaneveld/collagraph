@@ -87,7 +87,7 @@ main_window.setCentralWidget(container)
 def init(self):
     pass
 
-def on_mounted(self):
+def mounted(self):
     # Access the actual Qt widget
     qt_widget = self.refs["myButton"]
     qt_widget.setStyleSheet("background-color: blue;")

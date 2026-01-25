@@ -159,7 +159,7 @@ Test suite is built with pytest. Key plugins:
 
 ### VS Code
 
-For `.cgx` (Single-File Component) syntax highlighting, install the [CGX extension](https://github.com/fork-tongue/cgx-syntax-highlight-vscode).
+For `.cgx` (Single-File Component) syntax highlighting, install the [Collagraph LSP for VSCode](https://github.com/fork-tongue/collagraph-lsp-vscode).
 
 Recommended settings (`.vscode/settings.json`):
 
@@ -180,7 +180,7 @@ Recommended settings (`.vscode/settings.json`):
 
 ### Sublime Text
 
-For `.cgx` syntax highlighting, install the [CGX syntax package](https://github.com/fork-tongue/cgx-syntax-highlight-sublime).
+For `.cgx` syntax highlighting, install the [Collagraph LSP for Sublime Text](https://github.com/fork-tongue/collagraph-lsp-sublime).
 
 ### Formatting .cgx Files
 
