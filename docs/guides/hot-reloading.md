@@ -449,6 +449,8 @@ class SelectiveReloadHandler(FileSystemEventHandler):
 Implement custom state migration:
 
 ```python
+from observ import to_raw
+
 class StatefulComponent(cg.Component):
     # Class variable to store state across reloads
     _preserved_state = {}
@@ -462,8 +464,9 @@ class StatefulComponent(cg.Component):
             self.state["count"] = 0
 
     def before_unmount(self):
-        # Save state before reload
-        self.__class__._preserved_state = self.state
+        # Save state before reload as plain dict
+        # Use to_raw() to get a non-reactive copy
+        self.__class__._preserved_state = to_raw(self.state)
 ```
 
 ## See Also

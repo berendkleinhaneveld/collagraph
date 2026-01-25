@@ -261,11 +261,13 @@ class MyComponent(cg.Component):
 
 ```python
 import json
+from observ import to_raw
 
 class MyComponent(cg.Component):
     def print_state(self):
         """Pretty print state as JSON"""
-        print(json.dumps(self.state, indent=2, default=str))
+        # Use to_raw() to get a plain dict without reactive proxies
+        print(json.dumps(to_raw(self.state), indent=2, default=str))
 ```
 
 ### State Change Tracking
@@ -313,6 +315,9 @@ class MyComponent(cg.Component):
 ### Update Tracking
 
 ```python
+import time
+from observ import to_raw
+
 class MyComponent(cg.Component):
     def init(self):
         self.state["data"] = []
@@ -327,7 +332,8 @@ class MyComponent(cg.Component):
 
         self.update_log.append({
             "timestamp": time.time(),
-            "state": self.state,
+            # Use to_raw() to snapshot state as plain dict
+            "state": to_raw(self.state),
             "stack": stack
         })
 

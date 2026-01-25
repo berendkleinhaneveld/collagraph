@@ -217,6 +217,52 @@ class AdvancedComponent(cg.Component):
 
 For more information about `observ`, see its [documentation](https://github.com/berendkleinhaneveld/observ).
 
+### Converting to Plain Objects with `to_raw()`
+
+When you need a plain, non-reactive copy of your state (for serialization, logging, or storage), use `to_raw()`:
+
+```python
+from observ import to_raw
+
+class MyComponent(cg.Component):
+    def init(self):
+        self.state["user"] = {
+            "name": "Alice",
+            "settings": {"theme": "dark"}
+        }
+
+    def save_snapshot(self):
+        # ❌ This keeps reactive proxies for nested objects
+        snapshot = dict(self.state)
+
+        # ✅ Use to_raw() to get a completely plain dict
+        snapshot = to_raw(self.state)
+
+        # Now snapshot is a plain dict without any reactivity
+        return snapshot
+```
+
+**When to use `to_raw()`:**
+- **Serialization**: Converting state to JSON for API calls or storage
+- **Logging**: Capturing state snapshots for debugging
+- **State preservation**: Saving state across component reloads
+- **Comparison**: Comparing state values without triggering reactivity
+
+**Example with JSON serialization:**
+
+```python
+import json
+from observ import to_raw
+
+class MyComponent(cg.Component):
+    def export_state(self):
+        # Convert reactive state to plain dict before serializing
+        plain_state = to_raw(self.state)
+        return json.dumps(plain_state, indent=2)
+```
+
+**Note:** Simply using `dict()` on reactive state doesn't work because nested objects remain reactive. Use `to_raw()` for a complete conversion.
+
 ## Common Patterns
 
 ### Form Input Binding
