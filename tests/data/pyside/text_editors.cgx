@@ -29,7 +29,7 @@
     title="Plain Text Editor"
     object-name="plain-text-group"
   >
-    <qplaintextedit
+    <plaintextedit
       :plain-text="plain_text"
       object-name="plain-editor"
       @text-changed="on_plain_text_changed"

@@ -1,5 +1,5 @@
 <widget>
-  <qsplitter
+  <splitter
     :orientation="QtCore.Qt.Horizontal"
     object-name="main-splitter"
   >
@@ -45,7 +45,7 @@
         </itemmodel>
       </treeview>
     </groupbox>
-  </qsplitter>
+  </splitter>
   <widget
     :layout="{'type': 'box', 'direction': 'LeftToRight'}"
     object-name="button-bar"

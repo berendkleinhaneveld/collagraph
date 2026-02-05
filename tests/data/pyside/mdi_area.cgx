@@ -19,8 +19,8 @@
     </menu>
   </menubar>
   <widget>
-    <qmdiarea object-name="mdi-area">
-      <qmdisubwindow
+    <mdiarea object-name="mdi-area">
+      <mdisubwindow
         v-for="win in subwindows"
         :key="win['id']"
         :window-title="win['title']"
@@ -30,8 +30,8 @@
           <label :text="'Content of ' + win['title']" />
           <textedit :text="win['content']" />
         </widget>
-      </qmdisubwindow>
-    </qmdiarea>
+      </mdisubwindow>
+    </mdiarea>
   </widget>
   <statusbar object-name="mdi-statusbar">
   </statusbar>

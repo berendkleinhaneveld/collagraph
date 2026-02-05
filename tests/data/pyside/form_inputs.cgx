@@ -21,7 +21,7 @@
       :form_index="1"
       @value-changed="on_age_changed"
     />
-    <qdoublespinbox
+    <doublespinbox
       :value="height"
       :minimum="0.0"
       :maximum="3.0"
@@ -40,33 +40,33 @@
       :form_index="3"
       @current-index-changed="on_option_changed"
     />
-    <qfontcombobox
+    <fontcombobox
       object-name="font-combo"
       :form_label="'Font:'"
       :form_index="4"
       @current-font-changed="on_font_changed"
     />
-    <qdateedit
+    <dateedit
       :calendar-popup="True"
       object-name="date-input"
       :form_label="'Date:'"
       :form_index="5"
       @date-changed="on_date_changed"
     />
-    <qtimeedit
+    <timeedit
       object-name="time-input"
       :form_label="'Time:'"
       :form_index="6"
       @time-changed="on_time_changed"
     />
-    <qdatetimeedit
+    <datetimeedit
       :calendar-popup="True"
       object-name="datetime-input"
       :form_label="'Date/Time:'"
       :form_index="7"
       @date-time-changed="on_datetime_changed"
     />
-    <qkeysequenceedit
+    <keysequenceedit
       object-name="shortcut-input"
       :form_label="'Shortcut:'"
       :form_index="8"

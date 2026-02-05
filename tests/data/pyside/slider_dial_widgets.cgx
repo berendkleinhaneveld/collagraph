@@ -26,7 +26,7 @@
       @value-changed="on_slider_changed"
     />
     <label text="Dial:" :grid_index="(2, 0)" />
-    <qdial
+    <dial
       :minimum="0"
       :maximum="100"
       :value="slider_value"
@@ -37,7 +37,7 @@
       @value-changed="on_slider_changed"
     />
     <label text="Scroll Bar:" :grid_index="(3, 0)" />
-    <qscrollbar
+    <scrollbar
       :orientation="QtCore.Qt.Horizontal"
       :minimum="0"
       :maximum="100"
@@ -52,7 +52,7 @@
     :layout="{'type': 'box', 'direction': 'LeftToRight'}"
     object-name="display-group"
   >
-    <qlcdnumber
+    <lcdnumber
       :value="slider_value"
       :digit-count="3"
       object-name="lcd"

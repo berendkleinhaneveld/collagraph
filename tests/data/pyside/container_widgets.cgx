@@ -1,5 +1,5 @@
 <widget>
-  <qsplitter
+  <splitter
     :orientation="QtCore.Qt.Horizontal"
     object-name="main-splitter"
   >
@@ -30,7 +30,7 @@
       </tabwidget>
     </groupbox>
     <groupbox title="Tool Box" object-name="toolbox-container">
-      <qtoolbox object-name="tool-box">
+      <toolbox object-name="tool-box">
         <widget object-name="tool-page-1">
           <label text="Tool Page 1 Content" />
           <button text="Action 1" object-name="tool-btn-1" />
@@ -39,10 +39,10 @@
           <label text="Tool Page 2 Content" />
           <button text="Action 2" object-name="tool-btn-2" />
         </widget>
-      </qtoolbox>
+      </toolbox>
     </groupbox>
-  </qsplitter>
-  <qsplitter
+  </splitter>
+  <splitter
     :orientation="QtCore.Qt.Horizontal"
     object-name="lower-splitter"
   >
@@ -58,7 +58,7 @@
           @clicked="lambda idx=idx: set_stack_page(idx)"
         />
       </widget>
-      <qstackedwidget object-name="stacked-widget">
+      <stackedwidget object-name="stacked-widget">
         <widget object-name="stacked-page-0">
           <label text="Stacked Page 0" object-name="stacked-label-0" />
         </widget>
@@ -68,7 +68,7 @@
         <widget object-name="stacked-page-2">
           <label text="Stacked Page 2" object-name="stacked-label-2" />
         </widget>
-      </qstackedwidget>
+      </stackedwidget>
     </groupbox>
     <groupbox title="Scroll Area" object-name="scroll-container">
       <scrollarea object-name="scroll-area">
@@ -82,24 +82,24 @@
       </scrollarea>
     </groupbox>
     <groupbox title="Frame" object-name="frame-container">
-      <qframe
+      <frame
         :frame-shape="QtWidgets.QFrame.Box"
         :frame-shadow="QtWidgets.QFrame.Sunken"
         :line-width="2"
         object-name="styled-frame"
       >
         <label text="Content inside a QFrame" />
-      </qframe>
-      <qframe
+      </frame>
+      <frame
         :frame-shape="QtWidgets.QFrame.StyledPanel"
         :frame-shadow="QtWidgets.QFrame.Raised"
         :line-width="3"
         object-name="raised-frame"
       >
         <label text="Raised styled panel" />
-      </qframe>
+      </frame>
     </groupbox>
-  </qsplitter>
+  </splitter>
 </widget>
 
 <script>

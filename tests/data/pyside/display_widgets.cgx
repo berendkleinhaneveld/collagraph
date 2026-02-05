@@ -19,7 +19,7 @@
       text="LCD Number:"
       :grid_index="(1, 0)"
     />
-    <qlcdnumber
+    <lcdnumber
       :value="progress_value"
       :digit-count="3"
       object-name="lcd-display"
@@ -51,7 +51,7 @@
     title="Calendar"
     object-name="calendar-group"
   >
-    <qcalendarwidget
+    <calendarwidget
       object-name="calendar"
       @selection-changed="on_date_selected"
     />
@@ -64,7 +64,7 @@
     title="Text Browser"
     object-name="browser-group"
   >
-    <qtextbrowser
+    <textbrowser
       :html="browser_html"
       object-name="text-browser"
     />

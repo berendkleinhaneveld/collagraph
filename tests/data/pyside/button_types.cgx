@@ -32,12 +32,12 @@
     :layout="{'type': 'box', 'direction': 'LeftToRight'}"
     object-name="tool-group"
   >
-    <qtoolbutton
+    <toolbutton
       text="Tool 1"
       object-name="tool-btn-1"
       @clicked="on_button_clicked"
     />
-    <qtoolbutton
+    <toolbutton
       text="Tool 2"
       :checkable="True"
       object-name="tool-btn-2"
@@ -48,7 +48,7 @@
     title="Command Link Buttons"
     object-name="command-group"
   >
-    <qcommandlinkbutton
+    <commandlinkbutton
       text="Command Link"
       description="This is a command link button with a description"
       object-name="command-link-btn"

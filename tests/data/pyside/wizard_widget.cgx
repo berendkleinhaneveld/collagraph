@@ -8,20 +8,20 @@
     :text="f'Wizard result: {wizard_result}'"
     object-name="result-label"
   />
-  <qwizard
+  <wizard
     v-if="show_wizard"
     :window-title="'Setup Wizard'"
     object-name="wizard"
     @accepted="on_wizard_accepted"
     @rejected="on_wizard_rejected"
   >
-    <qwizardpage
+    <wizardpage
       title="Introduction"
       object-name="intro-page"
     >
       <label text="Welcome to the setup wizard." />
-    </qwizardpage>
-    <qwizardpage
+    </wizardpage>
+    <wizardpage
       title="Configuration"
       object-name="config-page"
     >
@@ -31,14 +31,14 @@
         object-name="wizard-input"
         @text-changed="on_wizard_input"
       />
-    </qwizardpage>
-    <qwizardpage
+    </wizardpage>
+    <wizardpage
       title="Conclusion"
       object-name="conclusion-page"
     >
       <label text="Setup is complete." />
-    </qwizardpage>
-  </qwizard>
+    </wizardpage>
+  </wizard>
 </widget>
 
 <script>

@@ -29,7 +29,7 @@
       @clicked="show_progress"
     />
   </groupbox>
-  <qdialog
+  <dialog
     v-if="show_custom"
     object-name="custom-dialog"
     :window-title="'Custom Dialog'"
@@ -46,7 +46,7 @@
       @accepted="on_dialog_accepted"
       @rejected="on_dialog_rejected"
     />
-  </qdialog>
+  </dialog>
   <label
     :text="f'Dialog result: {dialog_result}'"
     object-name="result-label"
