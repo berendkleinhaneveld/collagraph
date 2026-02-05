@@ -1,0 +1,68 @@
+<widget>
+  <button
+    text="Launch Wizard"
+    object-name="launch-btn"
+    @clicked="launch_wizard"
+  />
+  <label
+    :text="f'Wizard result: {wizard_result}'"
+    object-name="result-label"
+  />
+  <qwizard
+    v-if="show_wizard"
+    :window-title="'Setup Wizard'"
+    object-name="wizard"
+    @accepted="on_wizard_accepted"
+    @rejected="on_wizard_rejected"
+  >
+    <qwizardpage
+      title="Introduction"
+      object-name="intro-page"
+    >
+      <label text="Welcome to the setup wizard." />
+    </qwizardpage>
+    <qwizardpage
+      title="Configuration"
+      object-name="config-page"
+    >
+      <label text="Please configure your settings:" />
+      <lineedit
+        placeholder-text="Enter setting value"
+        object-name="wizard-input"
+        @text-changed="on_wizard_input"
+      />
+    </qwizardpage>
+    <qwizardpage
+      title="Conclusion"
+      object-name="conclusion-page"
+    >
+      <label text="Setup is complete." />
+    </qwizardpage>
+  </qwizard>
+</widget>
+
+<script>
+import collagraph as cg
+
+
+class WizardWidget(cg.Component):
+    def init(self):
+        self.state["show_wizard"] = False
+        self.state["wizard_result"] = "not started"
+        self.state["wizard_input_text"] = ""
+
+    def launch_wizard(self):
+        self.state["show_wizard"] = True
+        self.state["wizard_result"] = "in progress"
+
+    def on_wizard_input(self, text):
+        self.state["wizard_input_text"] = text
+
+    def on_wizard_accepted(self):
+        self.state["wizard_result"] = f"completed:{self.state['wizard_input_text']}"
+        self.state["show_wizard"] = False
+
+    def on_wizard_rejected(self):
+        self.state["wizard_result"] = "cancelled"
+        self.state["show_wizard"] = False
+</script>

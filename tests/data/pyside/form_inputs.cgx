@@ -1,0 +1,132 @@
+<widget>
+  <groupbox
+    title="Form Inputs"
+    :layout="{'type': 'form'}"
+    object-name="form-group"
+  >
+    <lineedit
+      :text="name"
+      placeholder-text="Enter your name"
+      object-name="name-input"
+      :form_label="'Name:'"
+      :form_index="0"
+      @text-changed="on_name_changed"
+    />
+    <spinbox
+      :value="age"
+      :minimum="0"
+      :maximum="150"
+      object-name="age-input"
+      :form_label="'Age:'"
+      :form_index="1"
+      @value-changed="on_age_changed"
+    />
+    <qdoublespinbox
+      :value="height"
+      :minimum="0.0"
+      :maximum="3.0"
+      :single-step="0.01"
+      suffix=" m"
+      object-name="height-input"
+      :form_label="'Height:'"
+      :form_index="2"
+      @value-changed="on_height_changed"
+    />
+    <combobox
+      :items="['Option A', 'Option B', 'Option C']"
+      :current-index="selected_option"
+      object-name="option-combo"
+      :form_label="'Option:'"
+      :form_index="3"
+      @current-index-changed="on_option_changed"
+    />
+    <qfontcombobox
+      object-name="font-combo"
+      :form_label="'Font:'"
+      :form_index="4"
+      @current-font-changed="on_font_changed"
+    />
+    <qdateedit
+      :calendar-popup="True"
+      object-name="date-input"
+      :form_label="'Date:'"
+      :form_index="5"
+      @date-changed="on_date_changed"
+    />
+    <qtimeedit
+      object-name="time-input"
+      :form_label="'Time:'"
+      :form_index="6"
+      @time-changed="on_time_changed"
+    />
+    <qdatetimeedit
+      :calendar-popup="True"
+      object-name="datetime-input"
+      :form_label="'Date/Time:'"
+      :form_index="7"
+      @date-time-changed="on_datetime_changed"
+    />
+    <qkeysequenceedit
+      object-name="shortcut-input"
+      :form_label="'Shortcut:'"
+      :form_index="8"
+      @key-sequence-changed="on_shortcut_changed"
+    />
+  </groupbox>
+  <label
+    :text="summary"
+    object-name="summary-label"
+  />
+</widget>
+
+<script>
+import collagraph as cg
+
+
+class FormInputs(cg.Component):
+    def init(self):
+        self.state["name"] = ""
+        self.state["age"] = 25
+        self.state["height"] = 1.75
+        self.state["selected_option"] = 0
+        self.state["font_name"] = ""
+        self.state["date_str"] = ""
+        self.state["time_str"] = ""
+        self.state["datetime_str"] = ""
+        self.state["shortcut_str"] = ""
+
+    @property
+    def summary(self):
+        return (
+            f"Name: {self.state['name']}, "
+            f"Age: {self.state['age']}, "
+            f"Height: {self.state['height']:.2f}m"
+        )
+
+    def on_name_changed(self, text):
+        self.state["name"] = text
+
+    def on_age_changed(self, value):
+        self.state["age"] = value
+
+    def on_height_changed(self, value):
+        self.state["height"] = value
+
+    def on_option_changed(self, index):
+        self.state["selected_option"] = index
+
+    def on_font_changed(self, font):
+        self.state["font_name"] = font.family()
+
+    def on_date_changed(self, date):
+        self.state["date_str"] = date.toString()
+
+    def on_time_changed(self, time):
+        self.state["time_str"] = time.toString()
+
+    def on_datetime_changed(self, datetime):
+        self.state["datetime_str"] = datetime.toString()
+
+    def on_shortcut_changed(self, sequence):
+        self.state["shortcut_str"] = sequence.toString()
+</script>

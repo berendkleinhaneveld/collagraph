@@ -1,0 +1,90 @@
+<widget>
+  <groupbox
+    title="Single Line Input"
+    object-name="single-line-group"
+  >
+    <lineedit
+      :text="single_line_text"
+      placeholder-text="Type here..."
+      object-name="line-input"
+      @text-changed="on_line_text_changed"
+    />
+    <lineedit
+      :text="single_line_text"
+      :read-only="True"
+      object-name="line-mirror"
+    />
+  </groupbox>
+  <groupbox
+    title="Rich Text Editor"
+    object-name="rich-text-group"
+  >
+    <textedit
+      :html="rich_text"
+      object-name="rich-editor"
+      @text-changed="on_rich_text_changed"
+    />
+  </groupbox>
+  <groupbox
+    title="Plain Text Editor"
+    object-name="plain-text-group"
+  >
+    <qplaintextedit
+      :plain-text="plain_text"
+      object-name="plain-editor"
+      @text-changed="on_plain_text_changed"
+    />
+  </groupbox>
+  <groupbox
+    title="Password Input"
+    :layout="{'type': 'form'}"
+    object-name="password-group"
+  >
+    <lineedit
+      :echo-mode="QtWidgets.QLineEdit.Password"
+      placeholder-text="Enter password"
+      object-name="password-input"
+      :form_label="'Password:'"
+      :form_index="0"
+      @text-changed="on_password_changed"
+    />
+    <lineedit
+      :echo-mode="QtWidgets.QLineEdit.PasswordEchoOnEdit"
+      placeholder-text="Confirm password"
+      object-name="confirm-input"
+      :form_label="'Confirm:'"
+      :form_index="1"
+    />
+  </groupbox>
+  <label
+    :text="f'Line length: {len(single_line_text)}, Rich text changed: {rich_changed}, Plain text changed: {plain_changed}'"
+    object-name="status-label"
+  />
+</widget>
+
+<script>
+from PySide6 import QtWidgets
+
+import collagraph as cg
+
+
+class TextEditors(cg.Component):
+    def init(self):
+        self.state["single_line_text"] = ""
+        self.state["rich_text"] = "<b>Hello</b> <i>World</i>"
+        self.state["plain_text"] = "Hello World"
+        self.state["rich_changed"] = False
+        self.state["plain_changed"] = False
+
+    def on_line_text_changed(self, text):
+        self.state["single_line_text"] = text
+
+    def on_rich_text_changed(self):
+        self.state["rich_changed"] = True
+
+    def on_plain_text_changed(self):
+        self.state["plain_changed"] = True
+
+    def on_password_changed(self, text):
+        pass
+</script>

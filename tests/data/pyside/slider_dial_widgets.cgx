@@ -1,0 +1,85 @@
+<widget>
+  <groupbox
+    title="Slider and Dial Controls"
+    :layout="{'type': 'grid'}"
+    object-name="slider-group"
+  >
+    <label text="Horizontal Slider:" :grid_index="(0, 0)" />
+    <slider
+      :orientation="QtCore.Qt.Horizontal"
+      :minimum="0"
+      :maximum="100"
+      :value="slider_value"
+      object-name="h-slider"
+      :grid_index="(0, 1)"
+      @value-changed="on_slider_changed"
+    />
+    <label text="Vertical Slider:" :grid_index="(1, 0)" />
+    <slider
+      :orientation="QtCore.Qt.Vertical"
+      :minimum="0"
+      :maximum="100"
+      :value="slider_value"
+      :minimum-height="100"
+      object-name="v-slider"
+      :grid_index="(1, 1)"
+      @value-changed="on_slider_changed"
+    />
+    <label text="Dial:" :grid_index="(2, 0)" />
+    <qdial
+      :minimum="0"
+      :maximum="100"
+      :value="slider_value"
+      :wrapping="False"
+      :notches-visible="True"
+      object-name="dial"
+      :grid_index="(2, 1)"
+      @value-changed="on_slider_changed"
+    />
+    <label text="Scroll Bar:" :grid_index="(3, 0)" />
+    <qscrollbar
+      :orientation="QtCore.Qt.Horizontal"
+      :minimum="0"
+      :maximum="100"
+      :value="slider_value"
+      object-name="scrollbar"
+      :grid_index="(3, 1)"
+      @value-changed="on_slider_changed"
+    />
+  </groupbox>
+  <groupbox
+    title="Display"
+    :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+    object-name="display-group"
+  >
+    <qlcdnumber
+      :value="slider_value"
+      :digit-count="3"
+      object-name="lcd"
+    />
+    <progressbar
+      :value="slider_value"
+      :minimum="0"
+      :maximum="100"
+      object-name="progress"
+    />
+    <label
+      :text="f'Value: {slider_value}'"
+      object-name="value-label"
+    />
+  </groupbox>
+</widget>
+
+<script>
+from PySide6 import QtCore
+
+import collagraph as cg
+
+
+class SliderDialWidgets(cg.Component):
+    def init(self):
+        self.state["slider_value"] = 50
+
+    def on_slider_changed(self, value):
+        self.state["slider_value"] = value
+</script>

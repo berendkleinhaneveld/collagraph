@@ -1,0 +1,128 @@
+<widget>
+  <groupbox
+    title="Push Buttons"
+    :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+    object-name="push-group"
+  >
+    <button
+      text="Normal"
+      object-name="normal-btn"
+      @clicked="on_button_clicked"
+    />
+    <button
+      text="Flat"
+      :flat="True"
+      object-name="flat-btn"
+      @clicked="on_button_clicked"
+    />
+    <button
+      text="Disabled"
+      :enabled="False"
+      object-name="disabled-btn"
+    />
+    <button
+      text="Checkable"
+      :checkable="True"
+      object-name="checkable-btn"
+      @toggled="on_checkable_toggled"
+    />
+  </groupbox>
+  <groupbox
+    title="Tool Buttons"
+    :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+    object-name="tool-group"
+  >
+    <qtoolbutton
+      text="Tool 1"
+      object-name="tool-btn-1"
+      @clicked="on_button_clicked"
+    />
+    <qtoolbutton
+      text="Tool 2"
+      :checkable="True"
+      object-name="tool-btn-2"
+      @toggled="on_tool_toggled"
+    />
+  </groupbox>
+  <groupbox
+    title="Command Link Buttons"
+    object-name="command-group"
+  >
+    <qcommandlinkbutton
+      text="Command Link"
+      description="This is a command link button with a description"
+      object-name="command-link-btn"
+      @clicked="on_button_clicked"
+    />
+  </groupbox>
+  <groupbox
+    title="Radio Buttons"
+    object-name="radio-group"
+  >
+    <radiobutton
+      text="Option 1"
+      :checked="selected_radio == 0"
+      object-name="radio-1"
+      @toggled="lambda checked: on_radio_toggled(0, checked)"
+    />
+    <radiobutton
+      text="Option 2"
+      :checked="selected_radio == 1"
+      object-name="radio-2"
+      @toggled="lambda checked: on_radio_toggled(1, checked)"
+    />
+    <radiobutton
+      text="Option 3"
+      :checked="selected_radio == 2"
+      object-name="radio-3"
+      @toggled="lambda checked: on_radio_toggled(2, checked)"
+    />
+  </groupbox>
+  <groupbox
+    title="Checkboxes"
+    object-name="check-group"
+  >
+    <checkbox
+      text="Check A"
+      object-name="check-a"
+      @state-changed="lambda state: on_check_changed('a', state)"
+    />
+    <checkbox
+      text="Check B"
+      :tri-state="True"
+      object-name="check-b"
+      @state-changed="lambda state: on_check_changed('b', state)"
+    />
+  </groupbox>
+  <label
+    :text="f'Last clicked: {last_clicked}, Radio: {selected_radio}'"
+    object-name="status-label"
+  />
+</widget>
+
+<script>
+import collagraph as cg
+
+
+class ButtonTypes(cg.Component):
+    def init(self):
+        self.state["last_clicked"] = "none"
+        self.state["selected_radio"] = 0
+        self.state["checks"] = {"a": False, "b": False}
+
+    def on_button_clicked(self):
+        self.state["last_clicked"] = "button"
+
+    def on_checkable_toggled(self, checked):
+        self.state["last_clicked"] = f"checkable:{checked}"
+
+    def on_tool_toggled(self, checked):
+        self.state["last_clicked"] = f"tool:{checked}"
+
+    def on_radio_toggled(self, index, checked):
+        if checked:
+            self.state["selected_radio"] = index
+
+    def on_check_changed(self, name, state):
+        self.state["checks"][name] = state
+</script>

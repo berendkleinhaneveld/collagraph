@@ -1,0 +1,90 @@
+<widget>
+  <groupbox
+    title="Dialog Launchers"
+    :layout="{'type': 'grid'}"
+    object-name="dialog-group"
+  >
+    <button
+      text="Show Message Box"
+      object-name="msgbox-btn"
+      :grid_index="(0, 0)"
+      @clicked="show_message"
+    />
+    <button
+      text="Show Input Dialog"
+      object-name="input-btn"
+      :grid_index="(0, 1)"
+      @clicked="show_input"
+    />
+    <button
+      text="Show Custom Dialog"
+      object-name="custom-btn"
+      :grid_index="(1, 0)"
+      @clicked="toggle_custom_dialog"
+    />
+    <button
+      text="Show Progress Dialog"
+      object-name="progress-btn"
+      :grid_index="(1, 1)"
+      @clicked="show_progress"
+    />
+  </groupbox>
+  <qdialog
+    v-if="show_custom"
+    object-name="custom-dialog"
+    :window-title="'Custom Dialog'"
+  >
+    <label text="This is a custom dialog" object-name="dialog-label" />
+    <lineedit
+      placeholder-text="Enter something"
+      object-name="dialog-input"
+      @text-changed="on_dialog_input"
+    />
+    <dialogbuttonbox
+      :buttons="('Ok', 'Cancel')"
+      object-name="dialog-buttons"
+      @accepted="on_dialog_accepted"
+      @rejected="on_dialog_rejected"
+    />
+  </qdialog>
+  <label
+    :text="f'Dialog result: {dialog_result}'"
+    object-name="result-label"
+  />
+</widget>
+
+<script>
+from PySide6 import QtWidgets
+
+import collagraph as cg
+
+
+class DialogWidgets(cg.Component):
+    def init(self):
+        self.state["show_custom"] = False
+        self.state["dialog_result"] = "none"
+        self.state["dialog_text"] = ""
+
+    def show_message(self):
+        self.state["dialog_result"] = "message_shown"
+
+    def show_input(self):
+        self.state["dialog_result"] = "input_shown"
+
+    def toggle_custom_dialog(self):
+        self.state["show_custom"] = not self.state["show_custom"]
+
+    def show_progress(self):
+        self.state["dialog_result"] = "progress_shown"
+
+    def on_dialog_input(self, text):
+        self.state["dialog_text"] = text
+
+    def on_dialog_accepted(self):
+        self.state["dialog_result"] = f"accepted:{self.state['dialog_text']}"
+        self.state["show_custom"] = False
+
+    def on_dialog_rejected(self):
+        self.state["dialog_result"] = "rejected"
+        self.state["show_custom"] = False
+</script>
