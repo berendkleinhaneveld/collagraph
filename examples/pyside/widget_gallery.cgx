@@ -1,0 +1,432 @@
+<!--
+  Widget Gallery: showcases most of the widget types supported by
+  collagraph's PySideRenderer in a single window.
+
+  Run this example as follows:
+  uv run collagraph examples/pyside/widget_gallery.cgx
+-->
+<window :window-title="'Widget Gallery'">
+  <menubar>
+    <menu title="&File">
+      <action text="&New" @triggered="on_new" />
+      <action text="&Open" @triggered="on_open" />
+      <action separator />
+      <menu title="Recent">
+        <action
+          v-for="item in recent_files"
+          :text="item"
+        />
+      </menu>
+      <action separator />
+      <action text="&Quit" @triggered="quit" />
+    </menu>
+    <menu title="&View">
+      <action
+        text="Show Dock"
+        :checkable="True"
+        :checked="show_dock"
+        @toggled="toggle_dock"
+      />
+    </menu>
+  </menubar>
+
+  <toolbar object-name="main-toolbar">
+    <action text="New" @triggered="on_new" />
+    <action text="Open" @triggered="on_open" />
+  </toolbar>
+
+  <widget>
+    <splitter :orientation="Qt.Horizontal">
+      <!-- Left panel: inputs and controls -->
+      <tabwidget object-name="main-tabs">
+        <!-- Tab 1: Form Inputs -->
+        <widget tab_label="Inputs" :tab_index="0">
+          <groupbox
+            title="Text Input"
+            :layout="{'type': 'form'}"
+          >
+            <lineedit
+              :text="name"
+              placeholder-text="Your name"
+              :form_label="'Name:'"
+              :form_index="0"
+              @text-changed="on_name_changed"
+            />
+            <lineedit
+              :echo-mode="QLineEdit.Password"
+              placeholder-text="Password"
+              :form_label="'Password:'"
+              :form_index="1"
+            />
+            <fontcombobox
+              :form_label="'Font:'"
+              :form_index="2"
+              @current-font-changed="on_font_changed"
+            />
+            <keysequenceedit
+              :form_label="'Shortcut:'"
+              :form_index="3"
+            />
+          </groupbox>
+          <groupbox
+            title="Numeric Input"
+            :layout="{'type': 'form'}"
+          >
+            <spinbox
+              :value="spin_value"
+              :minimum="0"
+              :maximum="100"
+              :form_label="'Integer:'"
+              :form_index="0"
+              @value-changed="on_spin_changed"
+            />
+            <doublespinbox
+              :value="1.5"
+              :minimum="0.0"
+              :maximum="10.0"
+              :single-step="0.1"
+              suffix=" units"
+              :form_label="'Double:'"
+              :form_index="1"
+            />
+          </groupbox>
+          <groupbox
+            title="Date/Time"
+            :layout="{'type': 'form'}"
+          >
+            <dateedit
+              :calendar-popup="True"
+              :form_label="'Date:'"
+              :form_index="0"
+            />
+            <timeedit
+              :form_label="'Time:'"
+              :form_index="1"
+            />
+            <datetimeedit
+              :calendar-popup="True"
+              :form_label="'Date/Time:'"
+              :form_index="2"
+            />
+          </groupbox>
+        </widget>
+
+        <!-- Tab 2: Buttons and Selection -->
+        <widget tab_label="Buttons" :tab_index="1">
+          <groupbox
+            title="Push Buttons"
+            :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+          >
+            <button
+              text="Normal"
+              @clicked="on_button_clicked"
+            />
+            <button
+              text="Flat"
+              :flat="True"
+              @clicked="on_button_clicked"
+            />
+            <button
+              text="Toggle"
+              :checkable="True"
+            />
+            <toolbutton
+              text="Tool"
+              @clicked="on_button_clicked"
+            />
+          </groupbox>
+          <groupbox title="Command Link">
+            <commandlinkbutton
+              text="Install Updates"
+              description="Download and install the latest updates"
+            />
+          </groupbox>
+          <groupbox title="Selection">
+            <radiobutton
+              v-for="opt in ['Small', 'Medium', 'Large']"
+              :text="opt"
+              :checked="opt == selected_size"
+              @toggled="lambda checked, o=opt: on_size_selected(o, checked)"
+            />
+          </groupbox>
+          <groupbox
+            title="Checkboxes"
+            :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+          >
+            <checkbox text="Bold" @state-changed="on_check" />
+            <checkbox text="Italic" @state-changed="on_check" />
+            <checkbox text="Underline" :tristate="True" @state-changed="on_check" />
+          </groupbox>
+          <groupbox title="Combo Box">
+            <combobox
+              :items="['Red', 'Green', 'Blue', 'Yellow', 'Cyan', 'Magenta']"
+              @current-index-changed="on_color_changed"
+            />
+          </groupbox>
+        </widget>
+
+        <!-- Tab 3: Sliders, dials, progress -->
+        <widget tab_label="Sliders" :tab_index="2">
+          <groupbox
+            title="Slider Controls"
+            :layout="{'type': 'grid'}"
+          >
+            <label text="Horizontal:" :grid_index="(0, 0)" />
+            <slider
+              :orientation="Qt.Horizontal"
+              :value="slider_value"
+              :minimum="0"
+              :maximum="100"
+              :grid_index="(0, 1)"
+              @value-changed="on_slider_changed"
+            />
+            <label text="Dial:" :grid_index="(1, 0)" />
+            <dial
+              :value="slider_value"
+              :minimum="0"
+              :maximum="100"
+              :notches-visible="True"
+              :grid_index="(1, 1)"
+              @value-changed="on_slider_changed"
+            />
+            <label text="Scroll Bar:" :grid_index="(2, 0)" />
+            <scrollbar
+              :orientation="Qt.Horizontal"
+              :value="slider_value"
+              :minimum="0"
+              :maximum="100"
+              :grid_index="(2, 1)"
+              @value-changed="on_slider_changed"
+            />
+          </groupbox>
+          <groupbox
+            title="Readout"
+            :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+          >
+            <lcdnumber
+              :value="slider_value"
+              :digit-count="3"
+            />
+            <progressbar
+              :value="slider_value"
+              :minimum="0"
+              :maximum="100"
+            />
+            <label :text="f'{slider_value}%'" />
+          </groupbox>
+        </widget>
+
+        <!-- Tab 4: Text Editing -->
+        <widget tab_label="Text" :tab_index="3">
+          <splitter :orientation="Qt.Vertical">
+            <groupbox title="Rich Text">
+              <textedit
+                :html="'<h3>Rich Text</h3><p>Supports <b>bold</b>, <i>italic</i>, and <u>underline</u>.</p>'"
+              />
+            </groupbox>
+            <groupbox title="Plain Text">
+              <plaintextedit
+                :plain-text="'Plain text editor.\nMultiple lines supported.'"
+              />
+            </groupbox>
+            <groupbox title="Read-Only Browser">
+              <textbrowser
+                :html="'<h3>Text Browser</h3><p>Read-only rich text display.</p><ul><li>Item A</li><li>Item B</li></ul>'"
+              />
+            </groupbox>
+          </splitter>
+        </widget>
+
+        <!-- Tab 5: Item Views -->
+        <widget tab_label="Views" :tab_index="4">
+          <splitter :orientation="Qt.Horizontal">
+            <groupbox title="List">
+              <listview>
+                <itemmodel>
+                  <standarditem
+                    v-for="item in list_items"
+                    :text="item"
+                  />
+                </itemmodel>
+              </listview>
+            </groupbox>
+            <groupbox title="Table">
+              <tableview>
+                <itemmodel
+                  :horizontal-header-labels="['Name', 'Value']"
+                  :column_count="2"
+                >
+                  <standarditem
+                    v-for="cell in table_cells"
+                    :text="cell['text']"
+                    :model_index="cell['model_index']"
+                  />
+                </itemmodel>
+              </tableview>
+            </groupbox>
+            <groupbox title="Tree">
+              <treeview>
+                <itemmodel :horizontal-header-labels="['Item']">
+                  <standarditem
+                    v-for="item in list_items"
+                    :text="item"
+                  />
+                </itemmodel>
+              </treeview>
+            </groupbox>
+          </splitter>
+        </widget>
+
+        <!-- Tab 6: Containers -->
+        <widget tab_label="Containers" :tab_index="5">
+          <splitter :orientation="Qt.Vertical">
+            <toolbox>
+              <widget>
+                <label text="First tool page content" />
+                <button text="Action" />
+              </widget>
+              <widget>
+                <label text="Second tool page content" />
+              </widget>
+            </toolbox>
+            <groupbox title="Frames">
+              <frame
+                :frame-shape="QFrame.Box"
+                :frame-shadow="QFrame.Sunken"
+                :line-width="2"
+              >
+                <label text="Sunken box frame" />
+              </frame>
+              <frame
+                :frame-shape="QFrame.StyledPanel"
+                :frame-shadow="QFrame.Raised"
+                :line-width="2"
+              >
+                <label text="Raised styled panel" />
+              </frame>
+            </groupbox>
+            <scrollarea>
+              <widget>
+                <label
+                  v-for="i in range(30)"
+                  :text="f'Scrollable row {i}'"
+                />
+              </widget>
+            </scrollarea>
+          </splitter>
+        </widget>
+
+        <!-- Tab 7: Calendar -->
+        <widget tab_label="Calendar" :tab_index="6">
+          <calendarwidget
+            @selection-changed="on_calendar_changed"
+          />
+          <label :text="f'Calendar selection changed: {calendar_clicks} time(s)'" />
+        </widget>
+      </tabwidget>
+
+      <!-- Right panel: display summary -->
+      <groupbox title="Summary">
+        <label :text="f'Name: {name}'" />
+        <label :text="f'Font: {current_font}'" />
+        <label :text="f'Spin: {spin_value}'" />
+        <label :text="f'Slider: {slider_value}%'" />
+        <label :text="f'Size: {selected_size}'" />
+        <label :text="f'Color index: {color_index}'" />
+        <label :text="f'Button clicks: {click_count}'" />
+      </groupbox>
+    </splitter>
+  </widget>
+
+  <dock
+    v-if="show_dock"
+    :area="Qt.RightDockWidgetArea"
+    object-name="info-dock"
+  >
+    <widget>
+      <label text="Dock widget content" />
+      <label :text="f'Slider value: {slider_value}'" />
+      <progressbar :value="slider_value" :minimum="0" :maximum="100" />
+    </widget>
+  </dock>
+
+  <statusbar :text="status_text" />
+</window>
+
+<script>
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QFrame, QLineEdit
+
+import collagraph as cg
+
+
+class WidgetGallery(cg.Component):
+    def init(self):
+        self.state["name"] = ""
+        self.state["current_font"] = ""
+        self.state["spin_value"] = 50
+        self.state["slider_value"] = 50
+        self.state["selected_size"] = "Medium"
+        self.state["color_index"] = 0
+        self.state["click_count"] = 0
+        self.state["show_dock"] = True
+        self.state["calendar_clicks"] = 0
+        self.state["status_text"] = "'Ready', 0"
+        self.state["recent_files"] = [
+            "document1.txt",
+            "document2.txt",
+            "report.pdf",
+        ]
+        self.state["list_items"] = [
+            "Apple", "Banana", "Cherry", "Date", "Elderberry",
+        ]
+
+    @property
+    def table_cells(self):
+        data = [("Width", "100"), ("Height", "200"), ("Depth", "50")]
+        cells = []
+        for row, (name, val) in enumerate(data):
+            cells.append({"text": name, "model_index": (row, 0)})
+            cells.append({"text": val, "model_index": (row, 1)})
+        return cells
+
+    def on_name_changed(self, text):
+        self.state["name"] = text
+
+    def on_font_changed(self, font):
+        self.state["current_font"] = font.family()
+
+    def on_spin_changed(self, value):
+        self.state["spin_value"] = value
+
+    def on_slider_changed(self, value):
+        self.state["slider_value"] = value
+
+    def on_size_selected(self, size, checked):
+        if checked:
+            self.state["selected_size"] = size
+
+    def on_color_changed(self, index):
+        self.state["color_index"] = index
+
+    def on_check(self, state):
+        pass
+
+    def on_button_clicked(self):
+        self.state["click_count"] += 1
+
+    def on_calendar_changed(self):
+        self.state["calendar_clicks"] += 1
+
+    def toggle_dock(self, checked):
+        self.state["show_dock"] = checked
+
+    def on_new(self):
+        self.state["status_text"] = "'New file', 2000"
+
+    def on_open(self):
+        self.state["status_text"] = "'Opening...', 2000"
+
+    def quit(self):
+        QApplication.instance().quit()
+</script>

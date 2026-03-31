@@ -1,0 +1,115 @@
+<widget>
+  <splitter
+    :orientation="QtCore.Qt.Horizontal"
+    object-name="main-splitter"
+  >
+    <groupbox title="List View" object-name="list-group">
+      <qlistview object-name="list-view">
+        <itemmodel
+          object-name="list-model"
+        >
+          <standarditem
+            v-for="item in list_items"
+            :text="item"
+          />
+        </itemmodel>
+      </qlistview>
+    </groupbox>
+    <groupbox title="Table View" object-name="table-group">
+      <qtableview object-name="table-view">
+        <itemmodel
+          :horizontal-header-labels="['Name', 'Value', 'Type']"
+          :column_count="3"
+          object-name="table-model"
+        >
+          <standarditem
+            v-for="cell in table_cells"
+            :text="cell['text']"
+            :model_index="cell['model_index']"
+          />
+        </itemmodel>
+      </qtableview>
+    </groupbox>
+    <groupbox title="Tree View" object-name="tree-group">
+      <treeview object-name="tree-view">
+        <itemmodel
+          :horizontal-header-labels="['Key', 'Value']"
+          :column_count="2"
+          object-name="tree-model"
+        >
+          <standarditem
+            v-for="cell in tree_cells"
+            :text="cell['text']"
+            :model_index="cell['model_index']"
+          />
+        </itemmodel>
+      </treeview>
+    </groupbox>
+  </splitter>
+  <widget
+    :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+    object-name="button-bar"
+  >
+    <button
+      text="Add Item"
+      object-name="add-btn"
+      @clicked="add_item"
+    />
+    <button
+      text="Remove Item"
+      object-name="remove-btn"
+      @clicked="remove_item"
+    />
+  </widget>
+</widget>
+
+<script>
+from PySide6 import QtCore
+
+import collagraph as cg
+
+
+class ItemViews(cg.Component):
+    def init(self):
+        self.state["list_items"] = ["Apple", "Banana", "Cherry", "Date"]
+        self.state["table_data"] = [
+            ("Width", "100", "int"),
+            ("Height", "200", "int"),
+            ("Name", "Widget", "str"),
+        ]
+        self.state["tree_data"] = [
+            ("Root 1", "Value 1"),
+            ("Root 2", "Value 2"),
+        ]
+
+    @property
+    def table_cells(self):
+        cells = []
+        for row, (name, value, typ) in enumerate(self.state["table_data"]):
+            cells.append({"text": name, "model_index": (row, 0)})
+            cells.append({"text": value, "model_index": (row, 1)})
+            cells.append({"text": typ, "model_index": (row, 2)})
+        return cells
+
+    @property
+    def tree_cells(self):
+        cells = []
+        for row, (key, value) in enumerate(self.state["tree_data"]):
+            cells.append({"text": key, "model_index": (row, 0)})
+            cells.append({"text": value, "model_index": (row, 1)})
+        return cells
+
+    def add_item(self):
+        idx = len(self.state["list_items"])
+        self.state["list_items"].append(f"Item {idx}")
+        self.state["table_data"].append((f"Field {idx}", "0", "int"))
+        self.state["tree_data"].append((f"Node {idx}", f"Val {idx}"))
+
+    def remove_item(self):
+        if self.state["list_items"]:
+            self.state["list_items"].pop()
+        if self.state["table_data"]:
+            self.state["table_data"].pop()
+        if self.state["tree_data"]:
+            self.state["tree_data"].pop()
+</script>

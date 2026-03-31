@@ -4,6 +4,7 @@ from . import (
     dockwidget,
     itemmodel,
     layouts,
+    lcdnumber,
     listview,
     menu,
     menubar,

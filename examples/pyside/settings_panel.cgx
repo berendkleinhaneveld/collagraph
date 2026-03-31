@@ -1,0 +1,304 @@
+<!--
+  Settings Panel: a realistic application settings dialog using
+  a variety of input and container widgets.
+
+  Run this example as follows:
+  uv run collagraph examples/pyside/settings_panel.cgx
+-->
+<window :window-title="'Application Settings'">
+  <widget>
+    <splitter :orientation="Qt.Horizontal">
+      <!-- Category navigation -->
+      <listview object-name="category-list" :maximum-width="180">
+        <itemmodel>
+          <standarditem
+            v-for="cat in categories"
+            :text="cat"
+          />
+        </itemmodel>
+        <itemselectionmodel
+          @selection-changed="on_category_changed"
+        />
+      </listview>
+
+      <!-- Settings pages -->
+      <stackedwidget object-name="pages" :layout="{'type': 'stacked', 'current_index': current_page}">
+        <!-- Page 0: General -->
+        <widget>
+          <groupbox title="Application" :layout="{'type': 'form'}">
+            <lineedit
+              :text="settings['app_name']"
+              :form_label="'App Name:'"
+              :form_index="0"
+              @text-changed="lambda t: update_setting('app_name', t)"
+            />
+            <combobox
+              :items="['English', 'Spanish', 'French', 'German', 'Japanese']"
+              :current-index="settings['language_index']"
+              :form_label="'Language:'"
+              :form_index="1"
+              @current-index-changed="lambda i: update_setting('language_index', i)"
+            />
+            <checkbox
+              text="Check for updates on startup"
+              :checked="settings['check_updates']"
+              :form_label="'Updates:'"
+              :form_index="2"
+              @state-changed="lambda s: update_setting('check_updates', bool(s))"
+            />
+          </groupbox>
+          <groupbox title="Startup">
+            <radiobutton
+              text="Show welcome screen"
+              :checked="settings['startup'] == 'welcome'"
+              @toggled="lambda c: update_setting('startup', 'welcome') if c else None"
+            />
+            <radiobutton
+              text="Open last project"
+              :checked="settings['startup'] == 'last'"
+              @toggled="lambda c: update_setting('startup', 'last') if c else None"
+            />
+            <radiobutton
+              text="Open empty project"
+              :checked="settings['startup'] == 'empty'"
+              @toggled="lambda c: update_setting('startup', 'empty') if c else None"
+            />
+          </groupbox>
+        </widget>
+
+        <!-- Page 1: Appearance -->
+        <widget>
+          <groupbox title="Font" :layout="{'type': 'form'}">
+            <fontcombobox
+              :form_label="'Family:'"
+              :form_index="0"
+              @current-font-changed="on_font_changed"
+            />
+            <spinbox
+              :value="settings['font_size']"
+              :minimum="6"
+              :maximum="72"
+              suffix=" pt"
+              :form_label="'Size:'"
+              :form_index="1"
+              @value-changed="lambda v: update_setting('font_size', v)"
+            />
+          </groupbox>
+          <groupbox title="Window">
+            <checkbox
+              text="Restore window position on startup"
+              :checked="settings['restore_window']"
+              @state-changed="lambda s: update_setting('restore_window', bool(s))"
+            />
+            <checkbox
+              text="Show toolbar"
+              :checked="settings['show_toolbar']"
+              @state-changed="lambda s: update_setting('show_toolbar', bool(s))"
+            />
+            <checkbox
+              text="Show status bar"
+              :checked="settings['show_statusbar']"
+              @state-changed="lambda s: update_setting('show_statusbar', bool(s))"
+            />
+          </groupbox>
+          <groupbox
+            title="Opacity"
+            :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+          >
+            <slider
+              :orientation="Qt.Horizontal"
+              :minimum="20"
+              :maximum="100"
+              :value="settings['opacity']"
+              @value-changed="lambda v: update_setting('opacity', v)"
+            />
+            <lcdnumber
+              :value="settings['opacity']"
+              :digit-count="3"
+            />
+          </groupbox>
+        </widget>
+
+        <!-- Page 2: Editor -->
+        <widget>
+          <groupbox title="Editing" :layout="{'type': 'form'}">
+            <spinbox
+              :value="settings['tab_size']"
+              :minimum="1"
+              :maximum="16"
+              :form_label="'Tab Size:'"
+              :form_index="0"
+              @value-changed="lambda v: update_setting('tab_size', v)"
+            />
+            <checkbox
+              text="Insert spaces instead of tabs"
+              :checked="settings['spaces_for_tabs']"
+              :form_label="'Tabs:'"
+              :form_index="1"
+              @state-changed="lambda s: update_setting('spaces_for_tabs', bool(s))"
+            />
+            <spinbox
+              :value="settings['undo_limit']"
+              :minimum="10"
+              :maximum="10000"
+              :single-step="10"
+              :form_label="'Undo Limit:'"
+              :form_index="2"
+              @value-changed="lambda v: update_setting('undo_limit', v)"
+            />
+          </groupbox>
+          <groupbox title="Auto-Save" :layout="{'type': 'form'}">
+            <checkbox
+              text="Enable auto-save"
+              :checked="settings['auto_save']"
+              :form_label="'Auto-Save:'"
+              :form_index="0"
+              @state-changed="lambda s: update_setting('auto_save', bool(s))"
+            />
+            <spinbox
+              :value="settings['auto_save_interval']"
+              :minimum="1"
+              :maximum="60"
+              suffix=" min"
+              :enabled="settings['auto_save']"
+              :form_label="'Interval:'"
+              :form_index="1"
+              @value-changed="lambda v: update_setting('auto_save_interval', v)"
+            />
+          </groupbox>
+        </widget>
+
+        <!-- Page 3: Shortcuts -->
+        <widget>
+          <groupbox
+            title="Key Bindings"
+            :layout="{'type': 'form'}"
+          >
+            <keysequenceedit
+              v-for="idx, action in enumerate(shortcut_actions)"
+              :form_label="action + ':'"
+              :form_index="idx"
+            />
+          </groupbox>
+        </widget>
+
+        <!-- Page 4: Advanced -->
+        <widget>
+          <groupbox title="Performance" :layout="{'type': 'form'}">
+            <doublespinbox
+              :value="settings['cache_size']"
+              :minimum="0.1"
+              :maximum="8.0"
+              :single-step="0.1"
+              suffix=" GB"
+              :form_label="'Cache Size:'"
+              :form_index="0"
+              @value-changed="lambda v: update_setting('cache_size', v)"
+            />
+            <combobox
+              :items="['Low', 'Normal', 'High']"
+              :current-index="settings['thread_priority']"
+              :form_label="'Priority:'"
+              :form_index="1"
+              @current-index-changed="lambda i: update_setting('thread_priority', i)"
+            />
+          </groupbox>
+          <groupbox title="Logging">
+            <combobox
+              :items="['Debug', 'Info', 'Warning', 'Error']"
+              :current-index="settings['log_level']"
+              @current-index-changed="lambda i: update_setting('log_level', i)"
+            />
+            <plaintextedit
+              :plain-text="log_preview"
+              :read-only="True"
+              :maximum-height="120"
+            />
+          </groupbox>
+        </widget>
+      </stackedwidget>
+    </splitter>
+
+    <!-- Bottom button bar -->
+    <dialogbuttonbox
+      :buttons="('Ok', 'Cancel', 'Apply', 'RestoreDefaults')"
+      @accepted="on_accept"
+      @rejected="on_reject"
+      @clicked="on_dialog_button"
+    />
+  </widget>
+
+  <statusbar :text="status_message" />
+</window>
+
+<script>
+from PySide6.QtCore import Qt
+
+import collagraph as cg
+
+
+class SettingsPanel(cg.Component):
+    def init(self):
+        self.state["current_page"] = 0
+        self.state["categories"] = [
+            "General",
+            "Appearance",
+            "Editor",
+            "Shortcuts",
+            "Advanced",
+        ]
+        self.state["shortcut_actions"] = [
+            "New File", "Open File", "Save", "Save As",
+            "Undo", "Redo", "Cut", "Copy", "Paste", "Find",
+        ]
+        self.state["settings"] = {
+            "app_name": "My Application",
+            "language_index": 0,
+            "check_updates": True,
+            "startup": "welcome",
+            "font_size": 12,
+            "restore_window": True,
+            "show_toolbar": True,
+            "show_statusbar": True,
+            "opacity": 100,
+            "tab_size": 4,
+            "spaces_for_tabs": True,
+            "undo_limit": 100,
+            "auto_save": True,
+            "auto_save_interval": 5,
+            "cache_size": 1.0,
+            "thread_priority": 1,
+            "log_level": 1,
+        }
+        self.state["status_message"] = "'Ready', 0"
+
+    @property
+    def log_preview(self):
+        levels = ["DEBUG", "INFO", "WARNING", "ERROR"]
+        level = levels[self.state["settings"]["log_level"]]
+        return (
+            f"[{level}] Application started\n"
+            f"[{level}] Settings loaded\n"
+            f"[{level}] Log level set to {level}"
+        )
+
+    def update_setting(self, key, value):
+        self.state["settings"][key] = value
+
+    def on_font_changed(self, font):
+        self.state["settings"]["font_family"] = font.family()
+
+    def on_category_changed(self, selected, deselected):
+        indexes = selected.indexes()
+        if indexes:
+            self.state["current_page"] = indexes[0].row()
+
+    def on_accept(self):
+        self.state["status_message"] = "'Settings saved', 2000"
+
+    def on_reject(self):
+        self.state["status_message"] = "'Cancelled', 2000"
+
+    def on_dialog_button(self, button):
+        pass
+</script>

@@ -1,0 +1,68 @@
+<window object-name="mdi-window">
+  <menubar>
+    <menu title="Windows">
+      <action
+        text="New Window"
+        object-name="new-window-action"
+        @triggered="add_subwindow"
+      />
+      <action
+        text="Cascade"
+        object-name="cascade-action"
+        @triggered="cascade_windows"
+      />
+      <action
+        text="Tile"
+        object-name="tile-action"
+        @triggered="tile_windows"
+      />
+    </menu>
+  </menubar>
+  <widget>
+    <mdiarea object-name="mdi-area">
+      <mdisubwindow
+        v-for="win in subwindows"
+        :key="win['id']"
+        :window-title="win['title']"
+        :object-name="'subwindow-' + str(win['id'])"
+      >
+        <widget>
+          <label :text="'Content of ' + win['title']" />
+          <textedit :text="win['content']" />
+        </widget>
+      </mdisubwindow>
+    </mdiarea>
+  </widget>
+  <statusbar object-name="mdi-statusbar">
+  </statusbar>
+</window>
+
+<script>
+import collagraph as cg
+
+
+class MdiArea(cg.Component):
+    def init(self):
+        self.state["subwindows"] = [
+            {"id": 0, "title": "Document 1", "content": "Hello"},
+            {"id": 1, "title": "Document 2", "content": "World"},
+        ]
+        self.state["next_id"] = 2
+
+    def add_subwindow(self):
+        next_id = self.state["next_id"]
+        self.state["subwindows"].append(
+            {
+                "id": next_id,
+                "title": f"Document {next_id + 1}",
+                "content": "",
+            }
+        )
+        self.state["next_id"] = next_id + 1
+
+    def cascade_windows(self):
+        pass
+
+    def tile_windows(self):
+        pass
+</script>

@@ -1,0 +1,117 @@
+<widget>
+  <splitter
+    :orientation="QtCore.Qt.Horizontal"
+    object-name="main-splitter"
+  >
+    <groupbox title="Tab Widget" object-name="tab-container">
+      <tabwidget object-name="tab-widget">
+        <widget
+          tab_label="Tab 1"
+          :tab_index="0"
+          object-name="tab-page-1"
+        >
+          <label text="Content of Tab 1" />
+        </widget>
+        <widget
+          tab_label="Tab 2"
+          :tab_index="1"
+          object-name="tab-page-2"
+        >
+          <label text="Content of Tab 2" />
+          <button text="Tab 2 Button" object-name="tab2-btn" />
+        </widget>
+        <widget
+          tab_label="Tab 3"
+          :tab_index="2"
+          object-name="tab-page-3"
+        >
+          <label text="Content of Tab 3" />
+        </widget>
+      </tabwidget>
+    </groupbox>
+    <groupbox title="Tool Box" object-name="toolbox-container">
+      <toolbox object-name="tool-box">
+        <widget object-name="tool-page-1">
+          <label text="Tool Page 1 Content" />
+          <button text="Action 1" object-name="tool-btn-1" />
+        </widget>
+        <widget object-name="tool-page-2">
+          <label text="Tool Page 2 Content" />
+          <button text="Action 2" object-name="tool-btn-2" />
+        </widget>
+      </toolbox>
+    </groupbox>
+  </splitter>
+  <splitter
+    :orientation="QtCore.Qt.Horizontal"
+    object-name="lower-splitter"
+  >
+    <groupbox title="Stacked Widget" object-name="stacked-container">
+      <widget
+        :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+        object-name="stacked-buttons"
+      >
+        <button
+          v-for="idx in range(3)"
+          :text="f'Page {idx}'"
+          :object-name="f'stack-btn-{idx}'"
+          @clicked="lambda idx=idx: set_stack_page(idx)"
+        />
+      </widget>
+      <stackedwidget object-name="stacked-widget">
+        <widget object-name="stacked-page-0">
+          <label text="Stacked Page 0" object-name="stacked-label-0" />
+        </widget>
+        <widget object-name="stacked-page-1">
+          <label text="Stacked Page 1" object-name="stacked-label-1" />
+        </widget>
+        <widget object-name="stacked-page-2">
+          <label text="Stacked Page 2" object-name="stacked-label-2" />
+        </widget>
+      </stackedwidget>
+    </groupbox>
+    <groupbox title="Scroll Area" object-name="scroll-container">
+      <scrollarea object-name="scroll-area">
+        <widget object-name="scroll-content">
+          <label
+            v-for="i in range(20)"
+            :text="f'Scrollable item {i}'"
+            :object-name="f'scroll-label-{i}'"
+          />
+        </widget>
+      </scrollarea>
+    </groupbox>
+    <groupbox title="Frame" object-name="frame-container">
+      <frame
+        :frame-shape="QtWidgets.QFrame.Box"
+        :frame-shadow="QtWidgets.QFrame.Sunken"
+        :line-width="2"
+        object-name="styled-frame"
+      >
+        <label text="Content inside a QFrame" />
+      </frame>
+      <frame
+        :frame-shape="QtWidgets.QFrame.StyledPanel"
+        :frame-shadow="QtWidgets.QFrame.Raised"
+        :line-width="3"
+        object-name="raised-frame"
+      >
+        <label text="Raised styled panel" />
+      </frame>
+    </groupbox>
+  </splitter>
+</widget>
+
+<script>
+from PySide6 import QtCore, QtWidgets
+
+import collagraph as cg
+
+
+class ContainerWidgets(cg.Component):
+    def init(self):
+        self.state["current_stack_page"] = 0
+
+    def set_stack_page(self, idx):
+        self.state["current_stack_page"] = idx
+</script>

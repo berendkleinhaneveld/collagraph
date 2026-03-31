@@ -1,0 +1,96 @@
+<widget>
+  <groupbox
+    title="Progress and Values"
+    :layout="{'type': 'grid'}"
+    object-name="progress-group"
+  >
+    <label
+      text="Progress:"
+      :grid_index="(0, 0)"
+    />
+    <progressbar
+      :value="progress_value"
+      :minimum="0"
+      :maximum="100"
+      object-name="progress-bar"
+      :grid_index="(0, 1)"
+    />
+    <label
+      text="LCD Number:"
+      :grid_index="(1, 0)"
+    />
+    <lcdnumber
+      :value="progress_value"
+      :digit-count="3"
+      object-name="lcd-display"
+      :grid_index="(1, 1)"
+    />
+  </groupbox>
+  <groupbox
+    title="Control"
+    :layout="{'type': 'box', 'direction': 'LeftToRight'}"
+    object-name="control-group"
+  >
+    <slider
+      :value="progress_value"
+      :minimum="0"
+      :maximum="100"
+      :orientation="QtCore.Qt.Horizontal"
+      object-name="value-slider"
+      @value-changed="on_value_changed"
+    />
+    <spinbox
+      :value="progress_value"
+      :minimum="0"
+      :maximum="100"
+      object-name="value-spin"
+      @value-changed="on_value_changed"
+    />
+  </groupbox>
+  <groupbox
+    title="Calendar"
+    object-name="calendar-group"
+  >
+    <calendarwidget
+      object-name="calendar"
+      @selection-changed="on_date_selected"
+    />
+    <label
+      :text="f'Selected date: {selected_date}'"
+      object-name="date-label"
+    />
+  </groupbox>
+  <groupbox
+    title="Text Browser"
+    object-name="browser-group"
+  >
+    <textbrowser
+      :html="browser_html"
+      object-name="text-browser"
+    />
+  </groupbox>
+</widget>
+
+<script>
+from PySide6 import QtCore
+
+import collagraph as cg
+
+
+class DisplayWidgets(cg.Component):
+    def init(self):
+        self.state["progress_value"] = 50
+        self.state["selected_date"] = "none"
+        self.state["browser_html"] = (
+            "<h3>Text Browser</h3>"
+            "<p>This is a <b>QTextBrowser</b> widget that can display "
+            "<i>rich text</i> content.</p>"
+            "<ul><li>Item 1</li><li>Item 2</li></ul>"
+        )
+
+    def on_value_changed(self, value):
+        self.state["progress_value"] = value
+
+    def on_date_selected(self):
+        self.state["selected_date"] = "changed"
+</script>
