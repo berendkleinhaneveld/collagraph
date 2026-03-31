@@ -4,7 +4,6 @@ These tests import .cgx components that exercise various QWidget subclasses
 and verify that the widget hierarchy is created correctly by the renderer.
 """
 
-from functools import partial
 
 import pytest
 
