@@ -387,7 +387,7 @@ class TestDisplayWidgets:
         def check_lcd():
             lcd = container.findChild(QtWidgets.QLCDNumber, "lcd-display")
             assert lcd is not None
-            assert lcd.value() == 50
+            assert lcd.intValue() == 50
 
         qtbot.waitUntil(check_lcd, timeout=500)
 
@@ -448,7 +448,7 @@ class TestDisplayWidgets:
             assert progress.value() == 75
             lcd = container.findChild(QtWidgets.QLCDNumber, "lcd-display")
             assert lcd is not None
-            assert lcd.value() == 75
+            assert lcd.intValue() == 75
 
         qtbot.waitUntil(check_updated, timeout=500)
 
@@ -866,7 +866,7 @@ class TestSliderDialWidgets:
             dial = container.findChild(QtWidgets.QDial, "dial")
             assert dial.value() == 50
             lcd = container.findChild(QtWidgets.QLCDNumber, "lcd")
-            assert lcd.value() == 50
+            assert lcd.intValue() == 50
             progress = container.findChild(QtWidgets.QProgressBar, "progress")
             assert progress.value() == 50
             label = container.findChild(QtWidgets.QLabel, "value-label")
@@ -896,7 +896,7 @@ class TestSliderDialWidgets:
 
         def check_propagated():
             lcd = container.findChild(QtWidgets.QLCDNumber, "lcd")
-            assert lcd.value() == 80
+            assert lcd.intValue() == 80
             progress = container.findChild(QtWidgets.QProgressBar, "progress")
             assert progress.value() == 80
             label = container.findChild(QtWidgets.QLabel, "value-label")

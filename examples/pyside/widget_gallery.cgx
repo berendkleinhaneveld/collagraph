@@ -155,7 +155,7 @@
           >
             <checkbox text="Bold" @state-changed="on_check" />
             <checkbox text="Italic" @state-changed="on_check" />
-            <checkbox text="Underline" :tri-state="True" @state-changed="on_check" />
+            <checkbox text="Underline" :tristate="True" @state-changed="on_check" />
           </groupbox>
           <groupbox title="Combo Box">
             <combobox

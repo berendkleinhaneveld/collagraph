@@ -89,7 +89,7 @@
     />
     <checkbox
       text="Check B"
-      :tri-state="True"
+      :tristate="True"
       object-name="check-b"
       @state-changed="lambda state: on_check_changed('b', state)"
     />
