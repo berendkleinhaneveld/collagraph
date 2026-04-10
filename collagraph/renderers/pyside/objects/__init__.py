@@ -16,6 +16,7 @@ from . import (
     statusbar,
     tab,
     toolbar,
+    toolbox,
     treewidget,
     treewidgetitem,
     widget,

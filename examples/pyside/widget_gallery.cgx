@@ -281,11 +281,11 @@
         <widget tab_label="Containers" :tab_index="5">
           <splitter :orientation="Qt.Vertical">
             <toolbox>
-              <widget>
+              <widget title="First tool">
                 <label text="First tool page content" />
                 <button text="Action" />
               </widget>
-              <widget>
+              <widget title="Second tool">
                 <label text="Second tool page content" />
               </widget>
             </toolbox>
