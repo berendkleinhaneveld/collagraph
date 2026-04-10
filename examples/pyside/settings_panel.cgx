@@ -22,7 +22,7 @@
       </listview>
 
       <!-- Settings pages -->
-      <stackedwidget object-name="pages" :layout="{'type': 'stacked', 'current_index': current_page}">
+      <stackedwidget object-name="pages" :current_index="current_page">
         <!-- Page 0: General -->
         <widget>
           <groupbox title="Application" :layout="{'type': 'form'}">

@@ -9,7 +9,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from collagraph.constants import EventLoopType
 
 from . import Renderer
-from .pyside import attr_name_to_method_name, camel_case
+from .pyside import attr_name_to_method_name, camel_case, resolve_method_name
 
 logger = logging.getLogger(__name__)
 
@@ -392,9 +392,11 @@ class PySideRenderer(Renderer):
                     logger.debug(f"{el} does not have metaObject")
                 else:
                     method_name = attr_name_to_method_name(attr, setter=False)
+                    resolved = resolve_method_name(el, method_name)
+                    property_name = resolved or method_name
 
                     meta_object = el.metaObject()
-                    property_idx = meta_object.indexOfProperty(method_name)
+                    property_idx = meta_object.indexOfProperty(property_name)
                     if property_idx >= 0:
                         meta_property = meta_object.property(property_idx)
                         result = meta_property.read(el)

@@ -11,6 +11,7 @@ from . import (
     qobject,
     scrollarea,
     splitter,
+    stackedwidget,
     standarditem,
     statusbar,
     tab,

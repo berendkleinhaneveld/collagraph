@@ -1,7 +1,12 @@
+import os
 import warnings
 
 import pytest
 
+pytest.importorskip("PySide6")
+
+# Make sure no window pops up during the tests!
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
 @pytest.fixture(scope="function", autouse=True)
 def qapp(qapp_args, qapp_cls, pytestconfig, qtbot):

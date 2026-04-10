@@ -4,7 +4,7 @@ from PySide6.QtCore import QItemSelectionModel
 from PySide6.QtGui import QAction, QStandardItemModel
 
 from ... import PySideRenderer
-from .. import attr_name_to_method_name, call_method
+from .. import attr_name_to_method_name, call_method, resolve_method_name
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 @PySideRenderer.register_set_attr(QAction, QStandardItemModel, QItemSelectionModel)
 def set_attribute(self, attr, value):
     method_name = attr_name_to_method_name(attr, setter=True)
-    method = getattr(self, method_name, None)
+    resolved = resolve_method_name(self, method_name)
+    method = getattr(self, resolved, None) if resolved else None
     if not method:
         logger.debug(f"Setting custom attr: {attr}")
         setattr(self, attr, value)
