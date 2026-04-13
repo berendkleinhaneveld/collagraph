@@ -8,6 +8,7 @@ pytest.importorskip("PySide6")
 # Make sure no window pops up during the tests!
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
+
 @pytest.fixture(scope="function", autouse=True)
 def qapp(qapp_args, qapp_cls, pytestconfig, qtbot):
     # workaround for https://bugreports.qt.io/browse/PYSIDE-2575
