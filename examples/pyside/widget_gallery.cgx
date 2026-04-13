@@ -371,7 +371,7 @@ class WidgetGallery(cg.Component):
         self.state["click_count"] = 0
         self.state["show_dock"] = True
         self.state["calendar_clicks"] = 0
-        self.state["status_text"] = "'Ready', 0"
+        self.state["status_text"] = ('Ready', 0)
         self.state["recent_files"] = [
             "document1.txt",
             "document2.txt",
@@ -422,10 +422,10 @@ class WidgetGallery(cg.Component):
         self.state["show_dock"] = checked
 
     def on_new(self):
-        self.state["status_text"] = "'New file', 2000"
+        self.state["status_text"] = ('New file', 2000)
 
     def on_open(self):
-        self.state["status_text"] = "'Opening...', 2000"
+        self.state["status_text"] = ('Opening...', 2000)
 
     def quit(self):
         QApplication.instance().quit()
