@@ -7,6 +7,7 @@ from ... import PySideRenderer
 def insert(self, el: QWidget, anchor=None):
     el.setParent(self)
     self.setWidget(el)
+    self.setWidgetResizable(True)
 
 
 @PySideRenderer.register_remove(QScrollArea)
